@@ -5,10 +5,15 @@ $utente = 'root';
 $password = 'antani1234';
 
 require_once './Classes/Database.php';
+require_once './Classes/Ruolo.php';
 
 try {
     $a = new Database($host, $utente, $password);
-    $database=$a->getDatabases();
+    $databases = $a->getDatabases();
+    $a->useDatabase('prova');
+    $tables = $a->getTables();
+    $ruoli = Ruolo::GetAll($a);
+    var_dump($ruoli);
     $a->close();
 } catch (Exception $e) {
     var_dump($e->getMessage() . ' (' . $e->getCode() . ')');
