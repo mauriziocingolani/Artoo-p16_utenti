@@ -3,8 +3,7 @@
 class Ruolo {
 
     public $RuoloID;
-    public $Nome;
-    public $Colore;
+    public $Descrizione;
     private static $nome_tabella = 'ruoli';
 
     public static function GetAll(Database $db) {
@@ -13,8 +12,7 @@ class Ruolo {
         foreach ($records as $n => $obj) :
             $a = new Ruolo;
             $a->RuoloID = $obj->RuoloID;
-            $a->Nome = $obj->Nome;
-            $a->Colore = $obj->Colore;
+            $a->Descrizione = $obj->Descrizione;
             $data[] = $a;
         endforeach;
         return $data;

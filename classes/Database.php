@@ -6,7 +6,7 @@ class Database extends mysqli {
     private $_utente;
     private $_password;
 
-    public function __construct($host, $utente, $password) {
+    public function __construct($host, $utente, $password, $database) {
         @parent::__construct($host, $utente, $password);
         $this->_host = $host;
         $this->_utente = $utente;
@@ -14,6 +14,7 @@ class Database extends mysqli {
         if ($this->connect_errno > 0)
             throw new Exception($this->connect_error
             , $this->connect_errno);
+        $this->useDatabase($database);
     }
 
     public function getDatabases() {

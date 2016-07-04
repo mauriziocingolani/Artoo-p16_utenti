@@ -1,4 +1,3 @@
-
 CREATE DATABASE IF NOT EXISTS utenti;
 USE utenti;
 
