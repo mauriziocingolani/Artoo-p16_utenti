@@ -16,11 +16,8 @@ if (count($_POST) > 0) : # esecuzione POST
     if (isset($_POST['utenteid']) && (int) $_POST['utenteid'] > 0) :
         $nuovo = false;
     endif;
-    if ($ok === true) :
-        $_SESSION['messaggio_utente'] = "OK!!! Utente " . ($nuovo ? 'creato' : 'aggiornato') . '!';
-        if ($nuovo) :
-            header("Location: /ArtooP16-Utenti/utente.php?utenteid=" . ($nuovo ? $db->insert_id : $_POST['utenteid']));
-        endif;
+    if (is_integer($ok)) :
+        header("Location: /ArtooP16-Utenti/utente.php?utenteid=" . $ok);
     elseif (is_string($ok)) :
         $message = $ok;
     endif;
@@ -55,7 +52,9 @@ $title = 'Utente';
     <body>
 
         <!-- barra di navigazione -->
-        <?php require './navbar.php'; ?>
+        <?php
+        require './navbar.php';
+        ?>
 
         <div>
 
@@ -63,6 +62,7 @@ $title = 'Utente';
             <?php if (isset($message)) : ?>
                 <div><?= $message; ?></div>
             <?php endif; ?>
+
             <?php if (isset($_SESSION['messaggio_utente'])) : ?>
                 <div>
                     <?php
@@ -72,7 +72,7 @@ $title = 'Utente';
                 </div>
             <?php endif; ?>
 
-            <?php if ($errore == null) : var_dump($dati); ?>
+            <?php if ($errore == null) : ?>
                 <!-- form -->
                 <form action="" method="post">
                     <input name="utenteid" type="hidden"

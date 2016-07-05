@@ -3,6 +3,9 @@ require_once './classes/Database.php';
 require_once './classes/Utente.php';
 
 $db = new Database('localhost', 'root', 'antani1234', 'utenti');
+if (count($_POST) > 0) :
+    $ok = Utente::EliminaUtente($db, $_POST['utenteid']);
+endif;
 $utenti = Utente::GetAll($db);
 $title = 'Utenti';
 ?>
@@ -56,6 +59,12 @@ $title = 'Utenti';
                                     <td>
                                         <?= $value->Descrizione; ?>
                                     </td>
+                                    <td>
+                                        <form action="" method="post">
+                                            <input name="utenteid" type="hidden" value="<?= $value->UtenteID; ?>" />
+                                            <button class="delete_utente" type="submit">Elimina</button>
+                                        </form>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -72,4 +81,10 @@ $title = 'Utenti';
 
         </div>
     </body>
+
+    <?php
+    $file = 'js/utenti.js';
+    require_once './footer.php';
+    ?>
+
 </html>

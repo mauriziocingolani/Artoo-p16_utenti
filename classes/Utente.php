@@ -29,15 +29,19 @@ class Utente {
                         "Email='{$parametri['email']}'," .
                         "Abilitato=" . (isset($parametri['abilitato']) ? 1 : 0) . " " .
                         "WHERE UtenteID=" . (int) $parametri['utenteid'];
+                $db->executeQuery($query);
+                $_SESSION['messaggio_utente'] = 'OK!!! Utente aggiornato!';
+                return (int) $parametri['utenteid'];
             else :
                 $query = "INSERT INTO " . self::$nome_tabella . " (Creato,RuoloID,NomeUtente,Nome,Cognome,Email,Abilitato) " .
                         "VALUES (NOW(),{$parametri['ruolo']},'{$parametri['nomeutente']}','{$parametri['nome']}'," .
                         " '{$parametri['cognome']}','{$parametri['email']}'," .
                         (isset($parametri['abilitato']) ? 1 : 0) .
                         ")";
+                $db->executeQuery($query);
+                $_SESSION['messaggio_utente'] = 'OK!!! Utente creato!';
+                return (int) $db->insert_id;
             endif;
-            $db->executeQuery($query);
-            return true;
         } catch (Exception $e) {
             switch ($e->getCode()) :
                 case 1062:
@@ -79,6 +83,16 @@ class Utente {
                 $data[] = $obj;
             endforeach;
             return $data;
+        } catch (Exception $e) {
+            return $e->getMessage() . ' (' . $e->getCode() . ')';
+        }
+    }
+
+    public static function EliminaUtente(Database $db, $utenteid) {
+        try {
+            $query = "DELETE FROM " . self::$nome_tabella . " WHERE UtenteID=" . (int) $utenteid;
+            $db->executeQuery($query);
+            return true;
         } catch (Exception $e) {
             return $e->getMessage() . ' (' . $e->getCode() . ')';
         }
