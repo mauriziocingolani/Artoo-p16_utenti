@@ -13,17 +13,29 @@ class Utente {
     public $Abilitato;
     private static $nome_tabella = 'utenti';
 
-    public static function CreaNuovoUtente(Database $db, array $parametri) {
+    public static function CreaOAggiornaUtente(Database $db, array $parametri) {
         try {
             $parametri['nomeutente'] = self::CleanString($parametri['nomeutente']);
             $parametri['nome'] = self::CleanString($parametri['nome']);
             $parametri['cognome'] = self::CleanString($parametri['cognome']);
             $parametri['email'] = self::CleanString($parametri['email']);
-            $query = "INSERT INTO " . self::$nome_tabella . " (Creato,RuoloID,NomeUtente,Nome,Cognome,Email,Abilitato) " .
-                    "VALUES (NOW(),{$parametri['ruolo']},'{$parametri['nomeutente']}','{$parametri['nome']}'," .
-                    " '{$parametri['cognome']}','{$parametri['email']}'," .
-                    (isset($parametri['abilitato']) ? 1 : 0) .
-                    ")";
+            if (isset($parametri['utenteid']) && (int) $parametri['utenteid'] > 0) :
+                $query = "UPDATE " . self::$nome_tabella . " " .
+                        "SET " .
+                        "Ruoloid=" . (int) $parametri['ruolo'] . "," .
+                        "NomeUtente='{$parametri['nomeutente']}'," .
+                        "Nome='{$parametri['nome']}'," .
+                        "Cognome='{$parametri['cognome']}'," .
+                        "Email='{$parametri['email']}'," .
+                        "Abilitato=" . (isset($parametri['abilitato']) ? 1 : 0) . " " .
+                        "WHERE UtenteID=" . (int) $parametri['utenteid'];
+            else :
+                $query = "INSERT INTO " . self::$nome_tabella . " (Creato,RuoloID,NomeUtente,Nome,Cognome,Email,Abilitato) " .
+                        "VALUES (NOW(),{$parametri['ruolo']},'{$parametri['nomeutente']}','{$parametri['nome']}'," .
+                        " '{$parametri['cognome']}','{$parametri['email']}'," .
+                        (isset($parametri['abilitato']) ? 1 : 0) .
+                        ")";
+            endif;
             $db->executeQuery($query);
             return true;
         } catch (Exception $e) {
@@ -48,7 +60,26 @@ class Utente {
                 endforeach;
             endforeach;
             return $utente;
-        } catch (Exception $ex) {
+        } catch (Exception $e) {
+            return $e->getMessage() . ' (' . $e->getCode() . ')';
+        }
+    }
+
+    public static function GetAll(Database $db) {
+        try {
+            $query = "SELECT * FROM v_utenti";
+            $utenti = $db->executeQuery($query);
+            $data = array();
+            foreach ($utenti as $u) :
+                $obj = new stdClass;
+                $obj->UtenteID = $u->UtenteID;
+                $obj->NomeUtente = $u->NomeUtente;
+                $obj->Abilitato = $u->Abilitato;
+                $obj->Descrizione = $u->Descrizione;
+                $data[] = $obj;
+            endforeach;
+            return $data;
+        } catch (Exception $e) {
             return $e->getMessage() . ' (' . $e->getCode() . ')';
         }
     }
