@@ -10,16 +10,25 @@ $dati = null;
 $nuovo = true;
 if (count($_POST) > 0) :
     $dati = $_POST;
-    $ok = Utente::CreaNuovoUtente($db, $_POST);
+    $ok = Utente::CreaOAggiornaUtente($db, $_POST);
+    if (isset($_POST['utenteid']) && (int) $_POST['utenteid'] > 0) :
+        $nuovo = false;
+    endif;
     if ($ok === true) :
-        $message = "OK!!! Utente creato";
+        $message = "OK!!! Utente " . ($nuovo ? 'creato' : 'aggiornato') . '!';
     elseif (is_string($ok)) :
         $message = $ok;
     endif;
 elseif (count($_GET) > 0) :
     $nuovo = false;
     $utente = Utente::LeggiUtente($db, $_GET['utenteid']); # oggetto di classe Utente
-    var_dump($utente);
+    $dati = array();
+    $dati['ruolo'] = $utente->RuoloID;
+    $dati['nomeutente'] = $utente->NomeUtente;
+    $dati['nome'] = $utente->Nome;
+    $dati['cognome'] = $utente->Cognome;
+    $dati['email'] = $utente->Email;
+    $dati['abilitato'] = $utente->Abilitato;
 endif;
 
 $title = 'Utente';
@@ -42,12 +51,15 @@ $title = 'Utente';
 
             <!-- form -->
             <form action="" method="post">
+                <input name="utenteid" type="hidden"
+                       value="<?php echo isset($_GET['utenteid']) ? $_GET['utenteid'] : null; ?>" />
                 <label>Ruolo</label>
                 <select name="ruolo">
 
                     <?php foreach ($ruoli as $ruolo) : ?>
-                        <option value="<?php echo $ruolo->RuoloID; ?>">
-                            <?php echo $ruolo->Descrizione; ?>
+                        <option value="<?php echo $ruolo->RuoloID; ?>"
+                                <?php echo isset($dati['ruolo']) && $ruolo->RuoloID == $dati['ruolo'] ? 'selected="selected"' : null; ?>>
+                                    <?php echo $ruolo->Descrizione; ?>
                         </option>
                     <?php endforeach; ?>
 
@@ -66,7 +78,7 @@ $title = 'Utente';
                        value="<?php echo isset($dati['email']) ? $dati['email'] : null; ?>" /><br />
                 <label for="abilitato">Abilitato</label>
                 <input id="abilitato" name="abilitato" type="checkbox" 
-                       <?php echo isset($dati['abilitato']) ? 'checked' : null ?> />
+                       <?php echo isset($dati['abilitato']) && (int) $dati['abilitato'] == 1 ? 'checked' : null ?> />
                 <br />
                 <button type="submit"><?php echo $nuovo ? 'Crea nuovo utente' : 'Aggiorna utente'; ?></button>
             </form>
