@@ -1,6 +1,6 @@
 <?php
 
-require_once './Post.php';
+require_once './classes/Post.php';
 
 class Utente {
 

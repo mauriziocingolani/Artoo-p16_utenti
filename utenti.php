@@ -3,9 +3,10 @@ require_once './classes/Database.php';
 require_once './classes/Utente.php';
 
 $db = new Database('localhost', 'root', 'antani1234', 'utenti');
+$message = null;
 if (count($_POST) > 0) :
     $ok = Utente::EliminaUtente($db, $_POST['utenteid']);
-    var_dump($ok);
+    $message = is_string($ok) ? 'Impossibile eliminare l\'utente: ' . $ok : 'Utente eliminato!';
 endif;
 $utenti = Utente::GetAll($db);
 $title = 'Utenti';
@@ -20,6 +21,10 @@ $title = 'Utenti';
         <?php require './navbar.php'; ?>
 
         <div>
+
+            <?php if ($message) : ?>
+                <div class="message"><?= $message; ?></div>
+            <?php endif; ?>
 
             <p><a href="/ArtooP16-Utenti/utente.php">Nuovo utente</a></p>
 
