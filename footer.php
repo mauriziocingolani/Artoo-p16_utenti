@@ -2,9 +2,11 @@
 <script>
     jQuery.noConflict();
     jQuery(document).ready(function ($) {
+        
 <?php
 if ($file != null)
     require_once './' . $file;
 ?>
+        
     });
 </script>

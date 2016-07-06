@@ -18,6 +18,7 @@ if (count($_POST) > 0) : # esecuzione POST
     endif;
     if (is_integer($ok)) :
         header("Location: /ArtooP16-Utenti/utente.php?utenteid=" . $ok);
+        return;
     elseif (is_string($ok)) :
         $message = $ok;
     endif;
@@ -60,11 +61,11 @@ $title = 'Utente';
 
             <!-- div con messaggio di errore/successo -->
             <?php if (isset($message)) : ?>
-                <div><?= $message; ?></div>
+                <div class="message"><?= $message; ?></div>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['messaggio_utente'])) : ?>
-                <div>
+                <div class="message">
                     <?php
                     echo $_SESSION['messaggio_utente'];
                     unset($_SESSION['messaggio_utente']);

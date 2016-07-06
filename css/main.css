@@ -1,0 +1,32 @@
+.navbar {
+    background: #eee;
+    border: 1px solid gray;
+    padding: 5px;
+}
+.navbar a,.navbar a:visited {
+    color: gray;
+    text-decoration: none;
+}
+.navbar .active {
+    font-weight: bold;
+}
+.message {
+    background: lightgoldenrodyellow;
+    border: 1px solid gray;
+    margin: 5px 0 5px 0;
+    padding: 5px;
+}
+
+.utenti {
+    border-collapse: collapse;
+}
+.utenti tr,.utenti td,.utenti th {
+    border: 1px solid gray;
+}
+.utenti th {
+    background: #eee;
+}
+
+form label {
+    width: 300px;
+}

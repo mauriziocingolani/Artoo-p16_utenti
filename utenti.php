@@ -41,11 +41,12 @@ $title = 'Utenti';
                         }
                     </style>
 
-                    <table>
+                    <table class="utenti">
                         <thead>
                             <tr>
                                 <th>Utente</th>
                                 <th>Ruolo</th>
+                                <th />
                             </tr>
                         </thead>
                         <tbody>
