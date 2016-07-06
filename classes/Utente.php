@@ -1,5 +1,7 @@
 <?php
 
+require_once './Post.php';
+
 class Utente {
 
     public $UtenteID;
@@ -90,10 +92,14 @@ class Utente {
 
     public static function EliminaUtente(Database $db, $utenteid) {
         try {
+            $db->query("START TRANSACTION;");
+            Post::EliminaPostDiUtente($db, $utenteid);
             $query = "DELETE FROM " . self::$nome_tabella . " WHERE UtenteID=" . (int) $utenteid;
             $db->executeQuery($query);
+            $db->query("COMMIT;");
             return true;
         } catch (Exception $e) {
+            $db->query('ROLLBACK;');
             return $e->getMessage() . ' (' . $e->getCode() . ')';
         }
     }

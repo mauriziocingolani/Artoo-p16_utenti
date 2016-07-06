@@ -5,6 +5,7 @@ require_once './classes/Utente.php';
 $db = new Database('localhost', 'root', 'antani1234', 'utenti');
 if (count($_POST) > 0) :
     $ok = Utente::EliminaUtente($db, $_POST['utenteid']);
+    var_dump($ok);
 endif;
 $utenti = Utente::GetAll($db);
 $title = 'Utenti';

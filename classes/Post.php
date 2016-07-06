@@ -13,6 +13,9 @@ class Post {
 
     public static function GetAll(Database $db) {
         try {
+//            $query="SELECT posts.*,utenti.Creato AS UCreato,utenti.Modificato AS UModificato,NomeUtente,Nome,Cognome, FROM posts ".
+//                    "JOIN utenti USING(UtenteID) ".
+//                    "ORDER BY posts.Creato DESC";
             $query = "SELECT * FROM " . self::$nome_tabella . " " .
                     "ORDER BY Creato DESC";
             $posts = $db->executeQuery($query);
@@ -22,6 +25,7 @@ class Post {
                 foreach ($post as $prop => $valore) :
                     $p->$prop = $valore;
                 endforeach;
+                $p->Utente = Utente::LeggiUtente($db, $p->UtenteID);
                 $data[] = $p;
             endforeach;
             return $data;
@@ -41,6 +45,17 @@ class Post {
             return true;
         } catch (Exception $e) {
             return $e->getMessage() . ' (' . $e->getCode() . ')';
+        }
+    }
+
+    public static function EliminaPostDiUtente(Database $db, $utenteid) {
+        try {
+            $query = "DELETE FROM " . self::$nome_tabella . " WHERE UtenteID=" . (int) $utenteid;
+            $db->executeQuery($query);
+            return true;
+        } catch (Exception $e) {
+            throw $e;
+//            return $e->getMessage() . ' (' . $e->getCode() . ')';
         }
     }
 
