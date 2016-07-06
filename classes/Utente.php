@@ -100,7 +100,7 @@ class Utente {
 
     public static function CercaUtenti(Database $db, array $parametri) {
         try {
-            $query = "ddsdsSELECT * FROM " . self::$nome_tabella . " " .
+            $query = "SELECT * FROM " . self::$nome_tabella . " " .
                     "WHERE NomeUtente LIKE '%" .
                     str_replace("'", "''", $parametri['text_ricerca'])
                     . "%' " .
