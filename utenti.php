@@ -81,6 +81,9 @@ $title = 'Utenti';
             <?php endif; ?>
 
         </div>
+
+        <?php require './cerca_utenti.php'; ?>
+
     </body>
 
     <?php

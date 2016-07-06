@@ -98,6 +98,28 @@ class Utente {
         }
     }
 
+    public static function CercaUtenti(Database $db, array $parametri) {
+        try {
+            $query = "ddsdsSELECT * FROM " . self::$nome_tabella . " " .
+                    "WHERE NomeUtente LIKE '%" .
+                    str_replace("'", "''", $parametri['text_ricerca'])
+                    . "%' " .
+                    "ORDER BY NomeUtente";
+            $utenti = $db->executeQuery($query);
+            $data = array();
+            foreach ($utenti as $utente) :
+                $obj = new Utente;
+                foreach ($utente as $prop => $valore) :
+                    $obj->$prop = $valore;
+                endforeach;
+                $data[] = $obj;
+            endforeach;
+            return $data;
+        } catch (Exception $e) {
+            return $e->getMessage() . ' (' . $e->getCode() . ')';
+        }
+    }
+
     private static function CleanString($string) {
         return str_replace("'", "''", $string);
     }
