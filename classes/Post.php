@@ -36,8 +36,8 @@ class Post {
 
     public static function CreaNuovoPost(Database $db, array $parametri) {
         try {
-            $parametri['titolo'] = str_replace("'", "''", $parametri['titolo']);
-            $parametri['contenuto'] = str_replace("'", "''", $parametri['contenuto']);
+            $parametri['titolo'] = htmlentities(str_replace("'", "''", $parametri['titolo']));
+            $parametri['contenuto'] = htmlentities(str_replace("'", "''", $parametri['contenuto']));
             $query = "INSERT INTO " . self::$nome_tabella .
                     "(Creato,UtenteID,Titolo,Contenuto) VALUES " .
                     "(NOW(),{$parametri['utenteid']},'{$parametri['titolo']}','{$parametri['contenuto']}')";
